@@ -32,10 +32,10 @@
 
     <button id="startBtn">ゲーム開始</button>
 
-    <canvas id="tetris" width="240" height="400"></canvas>
-    <div>Score: <span id="score">0</span></div>
+    // コメントアウトできない
 
     <script>
+      // コメントアウトできる
       // Canvas のセットアップ
       const canvas = document.getElementById("tetris");
       const ctx = canvas.getContext("2d");
@@ -241,6 +241,8 @@
       ];
 
       // ゲームループ
+      // ゲームループ関連の変数をグローバルで用意
+      let animationId = null;
       let dropCounter = 0;
       let dropInterval = 1000; // ミリ秒
       let lastTime = 0;
@@ -275,6 +277,33 @@
       const player = { pos: { x: 0, y: 0 }, matrix: null, score: 0 };
       playerReset();
       update();
+
+      // ゲームをリセット＆スタートさせる関数
+      function startGame() {
+        // フィールドをクリア
+        arena.forEach((row) => row.fill(0));
+        // スコアをリセット
+        player.score = 0;
+        document.getElementById("score").innerText = 0;
+        // 新しいピースを準備
+        playerReset();
+        // 既存ループがあればキャンセル
+        if (animationId !== null) {
+          cancelAnimationFrame(animationId);
+        }
+        // カウンタ類をリセット
+        dropCounter = 0;
+        lastTime = 0;
+        // ゲームループをスタート
+        animationId = requestAnimationFrame(update);
+      }
+
+      // ボタンにクリックイベントをセット
+      document.getElementById("startBtn").addEventListener("click", startGame);
+
+      // ページ読み込み時に自動で始めたくなければ、
+      // 以下の初期呼び出しをコメントアウトしてください
+      // animationId = requestAnimationFrame(update);
     </script>
   </body>
 </html>
