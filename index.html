@@ -33,6 +33,7 @@
     <button id="startBtn">ゲーム開始</button>
 
     // コメントアウトできない
+    <h2>ここに文字を入力すると画面のしたに表示される</h2>
 
     <script>
       // コメントアウトできる
@@ -254,7 +255,8 @@
           playerDrop();
         }
         draw();
-        requestAnimationFrame(update);
+        // requestAnimationFrame(update);
+        animationId = requestAnimationFrame(update);
       }
 
       // キー操作
@@ -275,8 +277,11 @@
       // 初期化
       const arena = createMatrix(12, 20);
       const player = { pos: { x: 0, y: 0 }, matrix: null, score: 0 };
-      playerReset();
-      update();
+      // playerReset(); 自動で開始するのでコメントアウト
+      // update(); 自動で開始するのでコメントアウト
+      // ↓ここを追加すると、空のフィールドが表示されます
+      playerReset(); // 新しいテトリミノをセット
+      draw();
 
       // ゲームをリセット＆スタートさせる関数
       function startGame() {
@@ -294,7 +299,8 @@
         // カウンタ類をリセット
         dropCounter = 0;
         lastTime = 0;
-        // ゲームループをスタート
+
+        // ここでループ再開！
         animationId = requestAnimationFrame(update);
       }
 
