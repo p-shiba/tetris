@@ -223,9 +223,11 @@
         player.pos.x =
           ((arena[0].length / 2) | 0) - ((player.matrix[0].length / 2) | 0);
         if (collide(arena, player)) {
-          arena.forEach((row) => row.fill(0));
-          player.score = 0;
-          document.getElementById("score").innerText = 0;
+          // arena.forEach((row) => row.fill(0));
+          // player.score = 0;
+          // document.getElementById("score").innerText = 0;
+          // ゲームオーバー処理へ
+          gameOver();
         }
       }
 
@@ -247,6 +249,10 @@
       let dropCounter = 0;
       let dropInterval = 1000; // ミリ秒
       let lastTime = 0;
+
+      // ゲーム中フラグ（false: 動いていない／true: 動いている）
+      let isPlaying = false;
+
       function update(time = 0) {
         const deltaTime = time - lastTime;
         lastTime = time;
@@ -256,7 +262,10 @@
         }
         draw();
         // requestAnimationFrame(update);
-        animationId = requestAnimationFrame(update);
+        // animationId = requestAnimationFrame(update);
+        if (isPlaying) {
+          animationId = requestAnimationFrame(update);
+        }
       }
 
       // キー操作
@@ -280,11 +289,23 @@
       // playerReset(); 自動で開始するのでコメントアウト
       // update(); 自動で開始するのでコメントアウト
       // ↓ここを追加すると、空のフィールドが表示されます
+
+      function gameOver() {
+        isPlaying = false; // ゲーム中フラグを下げる
+        if (animationId !== null) {
+          cancelAnimationFrame(animationId); // ゲームループを停止
+          animationId = null;
+        }
+        // （任意）アラートや画面上メッセージを出す
+        alert("ゲームオーバー！「ゲーム開始」ボタンで再挑戦できます。");
+      }
+
       playerReset(); // 新しいテトリミノをセット
       draw();
 
       // ゲームをリセット＆スタートさせる関数
       function startGame() {
+        isPlaying = true;
         // フィールドをクリア
         arena.forEach((row) => row.fill(0));
         // スコアをリセット
