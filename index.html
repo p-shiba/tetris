@@ -23,12 +23,35 @@
         font-size: 1.2em;
         margin-top: 10px;
       }
+      #controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      #controls button {
+        font-size: 1.5em; /* ボタンの絵文字を大きく */
+        padding: 10px 15px; /* タップしやすい余白 */
+        border: none;
+        border-radius: 8px;
+        background: #ddd;
+      }
+      #controls button:active {
+        background: #bbb; /* 押した感のフィードバック */
+      }
     </style>
   </head>
   <body>
     <h1>テトリス 🧩</h1>
     <canvas id="tetris" width="240" height="400"></canvas>
     <div>Score: <span id="score">0</span></div>
+
+    <div id="controls">
+      <button id="leftBtn">◀️</button>
+      <button id="rotateBtn">🔄</button>
+      <button id="rightBtn">▶️</button>
+      <button id="downBtn">⬇️</button>
+    </div>
 
     <button id="startBtn">ゲーム開始</button>
 
@@ -331,6 +354,53 @@
       // ページ読み込み時に自動で始めたくなければ、
       // 以下の初期呼び出しをコメントアウトしてください
       // animationId = requestAnimationFrame(update);
+
+      // 左移動
+      document.getElementById("leftBtn").addEventListener("click", () => {
+        playerMove(-1);
+      });
+      document.getElementById("leftBtn").addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        playerMove(-1);
+      });
+
+      // 右移動
+      document.getElementById("rightBtn").addEventListener("click", () => {
+        playerMove(1);
+      });
+      document
+        .getElementById("rightBtn")
+        .addEventListener("touchstart", (e) => {
+          e.preventDefault();
+          playerMove(1);
+        });
+
+      // 回転
+      document.getElementById("rotateBtn").addEventListener("click", () => {
+        playerRotate(1);
+      });
+      document
+        .getElementById("rotateBtn")
+        .addEventListener("touchstart", (e) => {
+          e.preventDefault();
+          playerRotate(1);
+        });
+
+      // 下落（一段落とす）
+      document.getElementById("downBtn").addEventListener("click", () => {
+        playerDrop();
+      });
+      document.getElementById("downBtn").addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        playerDrop();
+      });
+
+      // isPlaying === true のときだけボタン反応させたい
+      document.getElementById("leftBtn").addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        if (!isPlaying) return; // ゲーム中でなければ無視
+        playerMove(-1);
+      });
     </script>
   </body>
 </html>
